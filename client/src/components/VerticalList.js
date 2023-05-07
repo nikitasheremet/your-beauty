@@ -17,7 +17,6 @@ export default function VerticalList({ items }) {
     <div>
       {items.map((item, index) => (
         <ItemContainer key={index}>
-          <ItemImage src={item.imageUrl} alt={`${item.name} - ${item.brand}`} />
           <span>{item.name} - {item.brand}</span>
         </ItemContainer>
       ))}

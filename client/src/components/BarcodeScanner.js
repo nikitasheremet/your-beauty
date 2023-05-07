@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { BrowserMultiFormatReader } from '@zxing/library';
 
-export default function BarcodeScanner() {
+export default function BarcodeScanner({onBarcodeSave}) {
   const [scanning, setScanning] = useState(false);
   const [barCodeResult, setBarcodeResult] = useState("")
   const [error, setError] = useState(undefined)
   const [result, setResult] = useState({
     name: '',
-    brand: ''
+    brand: '',
+    details: {}
   })
 
   const handleScan = async (result) => {
@@ -20,7 +21,8 @@ export default function BarcodeScanner() {
         setBarcodeResult(scannedBarcode)
         setResult({
          name: beautyFactsResult?.product?.product_name_en,
-         brand: beautyFactsResult?.product?.brands_tags?.[0]
+         brand: beautyFactsResult?.product?.brands_tags?.[0],
+         details: beautyFactsResult
       })
         setScanning(false);
       }
@@ -29,6 +31,11 @@ export default function BarcodeScanner() {
     }
     
   };
+
+  function saveProduct() {
+    console.log("product saved", result.name)
+    onBarcodeSave(result)
+  }
 
   const startScan = async () => {
     setScanning(true);
@@ -54,6 +61,8 @@ export default function BarcodeScanner() {
     }
   };
 
+
+
   return (
     <div>
       <h1>I am here</h1>
@@ -75,6 +84,9 @@ export default function BarcodeScanner() {
           />
           <button onClick={() => setScanning(false)}>Stop Scanning</button>
         </div>
+      )}
+      {result && (
+        <button onClick={saveProduct}>Save Product</button>
       )}
     </div>
   );
